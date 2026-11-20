@@ -1,0 +1,884 @@
+<div class="dashboard-wrapper">
+  <!-- Glowing Background Orbs -->
+  <div class="aurora-orb orb-1"></div>
+  <div class="aurora-orb orb-2"></div>
+
+  <!-- TOP NAVBAR -->
+  <header class="top-nav glass-panel">
+    <div class="nav-brand">
+      <div class="brand-sparkle">✦</div>
+      <div class="brand-info">
+        <span class="brand-name">IAM SHIELD</span>
+        <span class="brand-tag">Cloud Identity & Access Service 2</span>
+      </div>
+    </div>
+
+    <!-- Center Keycloak & Swagger Status -->
+    <div class="nav-center-badges">
+      @if (keycloakConfig()?.enabled) {
+        <div class="kc-indicator glass-panel" title="Keycloak OIDC Identity Server đang bật">
+          <span class="pulse-dot"></span>
+          <span class="kc-label">Keycloak IDP:</span>
+          <span class="kc-val">iam-realm (8180)</span>
+        </div>
+      } @else {
+        <div class="kc-indicator glass-panel self-mode" title="Hệ thống đang chạy chế độ Self-IDP nội bộ">
+          <span class="pulse-dot orange"></span>
+          <span class="kc-label">Mode:</span>
+          <span class="kc-val">Self-IDP</span>
+        </div>
+      }
+
+      <a href="http://localhost:8080/swagger-ui/index.html" target="_blank" class="swagger-badge glass-panel" title="Mở Swagger API UI">
+        <span>📖 Swagger Docs</span>
+      </a>
+    </div>
+
+    <div class="nav-user">
+      <div class="user-pill">
+        <div class="user-avatar-mini">
+          @if (profile()?.avatarUrl) {
+            <img [src]="getAvatarSrc(profile()?.avatarUrl)" alt="Avatar" />
+          } @else {
+            <div class="avatar-placeholder">{{ profile()?.fullName?.charAt(0) || profile()?.email?.charAt(0) || 'U' }}</div>
+          }
+        </div>
+        <div class="user-meta">
+          <span class="user-name">{{ profile()?.fullName || 'Người Dùng' }}</span>
+          <div class="user-badges">
+            @for (role of profile()?.roles; track role) {
+              <span class="badge badge-purple">{{ role }}</span>
+            }
+            @if (profile()?.twoFactorEnabled) {
+              <span class="badge badge-emerald">2FA Bật</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn-logout" (click)="onLogout()" title="Đăng xuất">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Đăng Xuất</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="dashboard-container">
+    <!-- NAVIGATION TABS -->
+    <div class="tabs-bar glass-panel">
+      <button 
+        type="button" 
+        class="tab-item" 
+        [class.active]="activeTab === 'profile'"
+        (click)="onTabChange('profile')">
+        <span class="tab-icon">🌸</span>
+        <span class="tab-text">Hồ Sơ Cá Nhân</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="tab-item" 
+        [class.active]="activeTab === 'avatar'"
+        (click)="onTabChange('avatar')">
+        <span class="tab-icon">📸</span>
+        <span class="tab-text">Ảnh Đại Diện</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="tab-item" 
+        [class.active]="activeTab === 'security'"
+        (click)="onTabChange('security')">
+        <span class="tab-icon">🔒</span>
+        <span class="tab-text">Bảo Mật & 2FA</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="tab-item" 
+        [class.active]="activeTab === 'logs'"
+        (click)="onTabChange('logs')">
+        <span class="tab-icon">📜</span>
+        <span class="tab-text">Lịch Sử Hoạt Động</span>
+      </button>
+
+      <!-- TAB QUẢN LÝ NGƯỜI DÙNG (YÊU CẦU 2) -->
+      @if (hasUserManagementPermission()) {
+        <button 
+          type="button" 
+          class="tab-item highlight-tab" 
+          [class.active]="activeTab === 'users'"
+          (click)="onTabChange('users')">
+          <span class="tab-icon">👥</span>
+          <span class="tab-text">Quản Lý Users</span>
+        </button>
+      }
+
+      <!-- TAB PHÂN QUYỀN RBAC (YÊU CẦU 3) -->
+      @if (hasSystemAdminPermission()) {
+        <button 
+          type="button" 
+          class="tab-item highlight-tab" 
+          [class.active]="activeTab === 'rbac'"
+          (click)="onTabChange('rbac')">
+          <span class="tab-icon">🛡️</span>
+          <span class="tab-text">Phân Quyền RBAC</span>
+        </button>
+      }
+    </div>
+
+    <!-- TAB 1: PROFILE -->
+    @if (activeTab === 'profile') {
+      <div class="tab-content glass-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Thông Tin Cá Nhân</h2>
+          <p class="panel-subtitle">Cập nhật hồ sơ để hệ thống nhận diện bạn chính xác hơn</p>
+        </div>
+
+        <form (ngSubmit)="onUpdateProfile()" class="profile-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Địa Chỉ Email (Định danh)</label>
+              <input type="email" [value]="profile()?.email" disabled class="input-disabled" />
+              <span class="field-hint">Email dùng làm định danh đăng nhập và không thể sửa đổi</span>
+            </div>
+
+            <div class="form-group">
+              <label>Họ và Tên</label>
+              <input type="text" [(ngModel)]="profileForm.fullName" name="fullName" placeholder="Nhập họ và tên đầy đủ" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Số Điện Thoại</label>
+              <input type="text" [(ngModel)]="profileForm.phoneNumber" name="phoneNumber" placeholder="Ví dụ: 0912345678" />
+            </div>
+
+            <div class="form-group">
+              <label>Giới Tính</label>
+              <select [(ngModel)]="profileForm.gender" name="gender">
+                <option value="MALE">Nam 👨</option>
+                <option value="FEMALE">Nữ 👩</option>
+                <option value="OTHER">Khác 🌈</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ngày Sinh</label>
+              <input type="date" [(ngModel)]="profileForm.dateOfBirth" name="dateOfBirth" />
+            </div>
+
+            <div class="form-group">
+              <label>Địa Chỉ Thường Trú</label>
+              <input type="text" [(ngModel)]="profileForm.address" name="address" placeholder="Thành phố, Tỉnh, Quốc gia" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-dream" [disabled]="loading()">
+              @if (loading()) { <span class="spinner"></span> }
+              <span>Lưu Thay Đổi ✨</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+
+    <!-- TAB 2: AVATAR -->
+    @if (activeTab === 'avatar') {
+      <div class="tab-content glass-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Avatar Studio</h2>
+          <p class="panel-subtitle">Tải lên hình ảnh đại diện mang phong cách thơ mộng của riêng bạn</p>
+        </div>
+
+        <div class="avatar-grid">
+          <div class="avatar-upload-box glass-panel">
+            <div class="avatar-preview-area">
+              @if (avatarPreviewUrl) {
+                <img [src]="avatarPreviewUrl" alt="Xem trước" class="preview-img" />
+              } @else if (profile()?.avatarUrl) {
+                <img [src]="getAvatarSrc(profile()?.avatarUrl)" alt="Hiện tại" class="preview-img" />
+              } @else {
+                <div class="preview-empty">Chưa có ảnh</div>
+              }
+            </div>
+
+            <div class="upload-controls">
+              <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="file-hidden" />
+              <button type="button" class="btn-ghost" (click)="fileInput.click()">
+                <span>Chọn Ảnh Mới 📁</span>
+              </button>
+
+              @if (selectedAvatarFile) {
+                <div class="file-info-chip">Đã chọn: {{ selectedAvatarFile.name }}</div>
+                <button type="button" class="btn-dream" (click)="onUploadAvatar()" [disabled]="loading()">
+                  @if (loading()) { <span class="spinner"></span> }
+                  <span>Cập Nhật Ngay 📷</span>
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="avatar-history glass-panel">
+            <h3 class="sub-title">Lịch Sử Ảnh Đại Diện</h3>
+            <div class="history-gallery">
+              @for (av of avatarList(); track av.id) {
+                <div class="gallery-card" [class.is-current]="av.isCurrent">
+                  <img [src]="getAvatarSrc(av.fileUrl)" alt="Lịch sử" />
+                  <div class="gallery-badge">{{ av.isCurrent ? 'ĐANG DÙNG' : (av.uploadedAt | date:'dd/MM/yy') }}</div>
+                </div>
+              } @empty {
+                <p class="empty-text">Chưa có lịch sử ảnh nào được lưu trữ.</p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 3: SECURITY & 2FA -->
+    @if (activeTab === 'security') {
+      <div class="tab-content glass-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Bảo Mật & Xác Thực</h2>
+          <p class="panel-subtitle">Quản lý mật khẩu và các lớp bảo vệ nâng cao cho tài khoản</p>
+        </div>
+
+        <div class="security-grid">
+          <!-- Đổi Mật Khẩu -->
+          <div class="sec-card glass-panel">
+            <h3 class="sec-card-title">Đổi Mật Khẩu</h3>
+            <form (ngSubmit)="onChangePassword()" class="sec-form">
+              <div class="form-group">
+                <label>Mật Khẩu Hiện Tại</label>
+                <div class="input-with-eye">
+                  <input [type]="showOldPass ? 'text' : 'password'" [(ngModel)]="passwordForm.oldPassword" name="oldPass" />
+                  <button type="button" class="btn-eye" (click)="showOldPass = !showOldPass">{{ showOldPass ? '👁️' : '🔒' }}</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Mật Khẩu Mới</label>
+                <div class="input-with-eye">
+                  <input [type]="showNewPass ? 'text' : 'password'" [(ngModel)]="passwordForm.newPassword" name="newPass" />
+                  <button type="button" class="btn-eye" (click)="showNewPass = !showNewPass">{{ showNewPass ? '👁️' : '🔒' }}</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Xác Nhận Mật Khẩu Mới</label>
+                <div class="input-with-eye">
+                  <input [type]="showConfirmPass ? 'text' : 'password'" [(ngModel)]="passwordForm.confirmPassword" name="confirmPass" />
+                  <button type="button" class="btn-eye" (click)="showConfirmPass = !showConfirmPass">{{ showConfirmPass ? '👁️' : '🔒' }}</button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-dream" [disabled]="loading()">
+                @if (loading()) { <span class="spinner"></span> }
+                <span>Cập Nhật Mật Khẩu</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Xác thực 2 bước (2FA) -->
+          <div class="sec-card glass-panel">
+            <h3 class="sec-card-title">Xác Thực 2 Bước (2FA OTP)</h3>
+            <div class="twofa-desc">
+              <p>Bảo vệ tài khoản an toàn tuyệt đối với mã OTP 6 chữ số gửi tự động qua email mỗi lần đăng nhập.</p>
+              <div class="twofa-status-box">
+                <span class="status-label">Trạng thái:</span>
+                @if (profile()?.twoFactorEnabled) {
+                  <span class="badge badge-emerald">ĐANG BẬT BẢO VỆ 🛡️</span>
+                } @else {
+                  <span class="badge badge-rose">CHƯA KÍCH HOẠT ⚠️</span>
+                }
+              </div>
+            </div>
+
+            <div class="twofa-actions">
+              @if (profile()?.twoFactorEnabled) {
+                <button type="button" class="btn-danger" (click)="onOpenDisable2fa()" [disabled]="loading()">
+                  <span>Tắt Xác Thực 2FA</span>
+                </button>
+              } @else {
+                <button type="button" class="btn-dream" (click)="onOpenEnable2fa()" [disabled]="loading()">
+                  @if (loading()) { <span class="spinner"></span> }
+                  <span>Kích Hoạt 2FA Qua Email ✉️</span>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 4: ACTIVITY LOGS -->
+    @if (activeTab === 'logs') {
+      <div class="tab-content glass-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Lịch Sử Hoạt Động</h2>
+          <p class="panel-subtitle">Theo dõi các mốc đăng nhập, đổi mật khẩu và thao tác bảo mật</p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="dream-table">
+            <thead>
+              <tr>
+                <th>Hành Động</th>
+                <th>Trạng Thái</th>
+                <th>Địa Chỉ IP</th>
+                <th>Trình Duyệt / Thiết Bị</th>
+                <th>Chi Tiết</th>
+                <th>Thời Gian</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (log of activityLogs(); track log.id) {
+                <tr>
+                  <td><span class="action-tag">{{ log.action }}</span></td>
+                  <td>
+                    <span class="badge" [class.badge-emerald]="log.status === 'SUCCESS'" [class.badge-rose]="log.status === 'FAILED'">
+                      {{ log.status }}
+                    </span>
+                  </td>
+                  <td class="code-font">{{ log.ipAddress || '—' }}</td>
+                  <td class="text-truncate" title="{{ log.userAgent }}">{{ log.userAgent || '—' }}</td>
+                  <td>{{ log.details || '—' }}</td>
+                  <td class="text-muted">{{ log.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="text-center py-4">Chưa có lịch sử hoạt động nào được ghi nhận.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        @if (totalPages > 1) {
+          <div class="pagination-bar">
+            <button type="button" class="btn-ghost" [disabled]="currentPage === 0" (click)="loadLogs(currentPage - 1)">
+              ← Trang trước
+            </button>
+            <span class="page-indicator">Trang {{ currentPage + 1 }} / {{ totalPages }}</span>
+            <button type="button" class="btn-ghost" [disabled]="currentPage >= totalPages - 1" (click)="loadLogs(currentPage + 1)">
+              Trang sau →
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- TAB 5: QUẢN LÝ NGƯỜI DÙNG (YÊU CẦU 2 & 6) -->
+    @if (activeTab === 'users' && hasUserManagementPermission()) {
+      <div class="tab-content glass-panel">
+        <div class="panel-header flex-between">
+          <div>
+            <h2 class="panel-title">Quản Lý Người Dùng (Dual-IDP User Management)</h2>
+            <p class="panel-subtitle">Hỗ trợ Tạo, Xóa mềm, Khóa/Mở khóa, Đặt lại mật khẩu và Gán vai trò (Sync Keycloak + DB)</p>
+          </div>
+          <button type="button" class="btn-dream" (click)="openCreateUserModal()">
+            <span>+ Thêm Người Dùng Mới ✨</span>
+          </button>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="search-bar-wrapper glass-panel">
+          <div class="search-input-box">
+            <span class="search-icon">🔍</span>
+            <input 
+              type="text" 
+              [(ngModel)]="userKeyword" 
+              (keyup.enter)="onSearchUsers()" 
+              placeholder="Tìm kiếm theo email, họ tên người dùng..." />
+          </div>
+          <button type="button" class="btn-ghost" (click)="onSearchUsers()">Tìm Kiếm</button>
+        </div>
+
+        <!-- User Table -->
+        <div class="table-responsive">
+          <table class="dream-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Người Dùng</th>
+                <th>Vai Trò</th>
+                <th>Trạng Thái</th>
+                <th>Người Tạo (Auditor)</th>
+                <th>Ngày Tạo</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (u of userList(); track u.id) {
+                <tr>
+                  <td class="code-font">#{{ u.id }}</td>
+                  <td>
+                    <div class="user-inline-info">
+                      <span class="user-inline-email">{{ u.email }}</span>
+                      <span class="user-inline-name">{{ u.fullName || '—' }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="role-tags-wrap">
+                      @for (r of u.roles; track r) {
+                        <span class="badge badge-purple">{{ r }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    @if (u.isLocked) {
+                      <span class="badge badge-rose">BỊ KHÓA 🔒</span>
+                    } @else if (!u.isActive) {
+                      <span class="badge badge-yellow">VÔ HIỆU HÓA</span>
+                    } @else {
+                      <span class="badge badge-emerald">HOẠT ĐỘNG 🟢</span>
+                    }
+                  </td>
+                  <td class="code-font">{{ u.createdBy || 'SYSTEM' }}</td>
+                  <td class="text-muted">{{ u.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>
+                    <div class="action-buttons-wrap">
+                      <button type="button" class="btn-action-icon" (click)="openUserDetailModal(u)" title="Xem chi tiết">
+                        👁️
+                      </button>
+                      <button type="button" class="btn-action-icon" (click)="onToggleUserStatus(u)" [title]="u.isLocked ? 'Mở khóa' : 'Khóa'">
+                        {{ u.isLocked ? '🔓' : '🔒' }}
+                      </button>
+                      <button type="button" class="btn-action-icon" (click)="openResetPassModal(u)" title="Đặt lại mật khẩu">
+                        🔑
+                      </button>
+                      <button type="button" class="btn-action-icon" (click)="openAssignRolesModal(u)" title="Gán vai trò">
+                        🛡️
+                      </button>
+                      <button type="button" class="btn-action-icon danger" (click)="onDeleteUser(u)" title="Xóa mềm người dùng">
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="7" class="text-center py-4">Không tìm thấy người dùng nào phù hợp.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        @if (userTotalPages > 1) {
+          <div class="pagination-bar">
+            <button type="button" class="btn-ghost" [disabled]="userPage === 0" (click)="loadUsers(userPage - 1)">
+              ← Trang trước
+            </button>
+            <span class="page-indicator">Trang {{ userPage + 1 }} / {{ userTotalPages }} (Tổng {{ userTotalElements }} users)</span>
+            <button type="button" class="btn-ghost" [disabled]="userPage >= userTotalPages - 1" (click)="loadUsers(userPage + 1)">
+              Trang sau →
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- TAB 6: PHÂN QUYỀN RBAC (YÊU CẦU 3 & 6) -->
+    @if (activeTab === 'rbac' && hasSystemAdminPermission()) {
+      <div class="tab-content glass-panel">
+        <div class="panel-header flex-between">
+          <div>
+            <h2 class="panel-title">Phân Quyền RBAC (Role-Based Access Control)</h2>
+            <p class="panel-subtitle">Quản trị Vai trò (Roles), Quyền hạn (Permissions) và gán quyền theo chuẩn hasPermission()</p>
+          </div>
+
+          <!-- Sub-Tab Switcher -->
+          <div class="sub-tab-switcher glass-panel">
+            <button type="button" [class.active]="rbacSubTab === 'roles'" (click)="rbacSubTab = 'roles'">
+              Vai Trò (Roles)
+            </button>
+            <button type="button" [class.active]="rbacSubTab === 'permissions'" (click)="rbacSubTab = 'permissions'">
+              Quyền Hạn (Permissions)
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-TAB 1: ROLES -->
+        @if (rbacSubTab === 'roles') {
+          <div class="rbac-section">
+            <div class="flex-between py-2">
+              <span class="section-title">Danh Sách Vai Trò Hệ Thống</span>
+              <button type="button" class="btn-dream" (click)="openCreateRoleModal()">+ Thêm Vai Trò Mới</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="dream-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên Vai Trò</th>
+                    <th>Mô Tả</th>
+                    <th>Số Quyền Sở Hữu</th>
+                    <th>Người Tạo</th>
+                    <th>Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (r of roleList(); track r.id) {
+                    <tr>
+                      <td class="code-font">#{{ r.id }}</td>
+                      <td><span class="badge badge-purple">{{ r.name }}</span></td>
+                      <td>{{ r.description || '—' }}</td>
+                      <td>
+                        <span class="badge badge-emerald">{{ r.permissions?.length || 0 }} Quyền</span>
+                      </td>
+                      <td class="code-font">{{ r.createdBy || 'SYSTEM' }}</td>
+                      <td>
+                        <div class="action-buttons-wrap">
+                          <button type="button" class="btn-ghost btn-sm" (click)="openAssignPermsModal(r)">
+                            ⚙️ Gán Quyền
+                          </button>
+                          <button type="button" class="btn-action-icon danger" (click)="onDeleteRole(r)" title="Xóa mềm vai trò">
+                            🗑️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="6" class="text-center py-4">Chưa có vai trò nào được định nghĩa.</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        <!-- SUB-TAB 2: PERMISSIONS -->
+        @if (rbacSubTab === 'permissions') {
+          <div class="rbac-section">
+            <div class="flex-between py-2">
+              <span class="section-title">Danh Sách Quyền Hạn (Permissions)</span>
+              <button type="button" class="btn-dream" (click)="openCreatePermModal()">+ Thêm Quyền Mới</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="dream-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên Quyền</th>
+                    <th>Module</th>
+                    <th>Mô Tả</th>
+                    <th>Người Tạo</th>
+                    <th>Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (p of permissionList(); track p.id) {
+                    <tr>
+                      <td class="code-font">#{{ p.id }}</td>
+                      <td><span class="action-tag">{{ p.name }}</span></td>
+                      <td><span class="badge badge-purple">{{ p.module }}</span></td>
+                      <td>{{ p.description || '—' }}</td>
+                      <td class="code-font">{{ p.createdBy || 'SYSTEM' }}</td>
+                      <td>
+                        <button type="button" class="btn-action-icon danger" (click)="onDeletePermission(p)" title="Xóa mềm quyền">
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="6" class="text-center py-4">Chưa có quyền hạn nào được định nghĩa.</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODALS SECTION -->
+  <!-- ========================================== -->
+
+  <!-- MODAL: CREATE USER -->
+  @if (showCreateUserModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel large-modal">
+        <h3 class="modal-title">Tạo Người Dùng Mới ✨</h3>
+        <p class="modal-desc">Tạo tài khoản và đồng bộ ngay lập tức sang Keycloak Identity Server & Database nội bộ</p>
+
+        <div class="form-grid-modal">
+          <div class="form-group">
+            <label>Địa Chỉ Email *</label>
+            <input type="email" [(ngModel)]="newUserForm.email" placeholder="user@example.com" autofocus />
+          </div>
+
+          <div class="form-group">
+            <label>Mật Khẩu Khởi Tạo *</label>
+            <input type="password" [(ngModel)]="newUserForm.password" placeholder="Mật khẩu tối thiểu 6 ký tự" />
+          </div>
+
+          <div class="form-group">
+            <label>Họ và Tên</label>
+            <input type="text" [(ngModel)]="newUserForm.fullName" placeholder="Nhập họ và tên đầy đủ" />
+          </div>
+
+          <div class="form-group">
+            <label>Số Điện Thoại</label>
+            <input type="text" [(ngModel)]="newUserForm.phoneNumber" placeholder="0912345678" />
+          </div>
+
+          <div class="form-group">
+            <label>Địa Chỉ</label>
+            <input type="text" [(ngModel)]="newUserForm.address" placeholder="Địa chỉ thường trú" />
+          </div>
+
+          <div class="form-group">
+            <label>Vai Trò Khởi Tạo</label>
+            <select [(ngModel)]="newUserForm.selectedRole">
+              <option value="ROLE_USER">ROLE_USER (Người dùng tiêu chuẩn)</option>
+              <option value="USER_MANAGER">USER_MANAGER (Quản lý người dùng)</option>
+              <option value="SYSTEM_ADMIN">SYSTEM_ADMIN (Quản trị hệ thống)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showCreateUserModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onCreateUserSubmit()" [disabled]="loading()">
+            @if (loading()) { <span class="spinner"></span> }
+            <span>Tạo Người Dùng & Đồng Bộ 🚀</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: RESET PASSWORD BY ADMIN -->
+  @if (showResetPassModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel">
+        <h3 class="modal-title">Đặt Lại Mật Khẩu</h3>
+        <p class="modal-desc">
+          Đặt lại mật khẩu cho tài khoản <strong>{{ selectedUserForAction?.email }}</strong> (Sẽ đồng bộ sang Keycloak):
+        </p>
+
+        <div class="form-group py-2">
+          <label>Mật Khẩu Mới</label>
+          <input type="password" [(ngModel)]="adminResetPassword" placeholder="Nhập mật khẩu mới (>= 6 ký tự)" autofocus />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showResetPassModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onAdminResetPassSubmit()" [disabled]="loading()">
+            @if (loading()) { <span class="spinner"></span> }
+            <span>Xác Nhận Đặt Lại</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: ASSIGN ROLES TO USER -->
+  @if (showAssignRolesModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel">
+        <h3 class="modal-title">Phân Vai Trò Cho Người Dùng</h3>
+        <p class="modal-desc">Chọn các vai trò cho tài khoản <strong>{{ selectedUserForAction?.email }}</strong>:</p>
+
+        <div class="checkbox-list">
+          @for (r of roleList(); track r.id) {
+            <label class="checkbox-item glass-panel">
+              <input 
+                type="checkbox" 
+                [checked]="selectedRolesForUser.includes(r.name)" 
+                (change)="toggleRoleSelection(r.name)" />
+              <div class="checkbox-text">
+                <span class="role-title">{{ r.name }}</span>
+                <span class="role-desc">{{ r.description || 'Không có mô tả' }}</span>
+              </div>
+            </label>
+          }
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showAssignRolesModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onAssignRolesSubmit()" [disabled]="loading()">
+            @if (loading()) { <span class="spinner"></span> }
+            <span>Lưu Vai Trò 🛡️</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: USER DETAILS -->
+  @if (showUserDetailModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel">
+        <h3 class="modal-title">Chi Tiết Người Dùng</h3>
+        <div class="detail-rows-wrap">
+          <div class="detail-row"><span class="lbl">ID:</span> <span class="val code-font">#{{ selectedUserForAction?.id }}</span></div>
+          <div class="detail-row"><span class="lbl">Email:</span> <span class="val">{{ selectedUserForAction?.email }}</span></div>
+          <div class="detail-row"><span class="lbl">Họ và Tên:</span> <span class="val">{{ selectedUserForAction?.fullName || '—' }}</span></div>
+          <div class="detail-row"><span class="lbl">Số điện thoại:</span> <span class="val">{{ selectedUserForAction?.phoneNumber || '—' }}</span></div>
+          <div class="detail-row"><span class="lbl">Địa chỉ:</span> <span class="val">{{ selectedUserForAction?.address || '—' }}</span></div>
+          <div class="detail-row"><span class="lbl">Trạng thái:</span> <span class="val">{{ selectedUserForAction?.isLocked ? 'Bị Khóa' : 'Hoạt Động' }}</span></div>
+          <div class="detail-row"><span class="lbl">Người tạo (Auditor):</span> <span class="val code-font">{{ selectedUserForAction?.createdBy || 'SYSTEM' }}</span></div>
+          <div class="detail-row"><span class="lbl">Người sửa (Auditor):</span> <span class="val code-font">{{ selectedUserForAction?.updatedBy || '—' }}</span></div>
+          <div class="detail-row"><span class="lbl">Ngày tạo:</span> <span class="val">{{ selectedUserForAction?.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</span></div>
+          <div class="detail-row"><span class="lbl">Vai trò:</span> <span class="val">{{ selectedUserForAction?.roles?.join(', ') }}</span></div>
+          <div class="detail-row"><span class="lbl">Quyền hạn (Permissions):</span> <span class="val code-font">{{ selectedUserForAction?.permissions?.join(', ') || 'Chưa gán quyền' }}</span></div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-dream" (click)="showUserDetailModal.set(false)">Đóng</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: CREATE ROLE -->
+  @if (showCreateRoleModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel">
+        <h3 class="modal-title">Tạo Vai Trò Mới</h3>
+        <div class="form-group py-2">
+          <label>Tên Vai Trò (Tự động in hoa)</label>
+          <input type="text" [(ngModel)]="newRoleForm.name" placeholder="Ví dụ: EDITOR, MODERATOR" autofocus />
+        </div>
+        <div class="form-group py-2">
+          <label>Mô Tả</label>
+          <input type="text" [(ngModel)]="newRoleForm.description" placeholder="Mô tả chức trách của vai trò" />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showCreateRoleModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onCreateRoleSubmit()" [disabled]="loading()">
+            <span>Tạo Vai Trò</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: ASSIGN PERMISSIONS TO ROLE -->
+  @if (showAssignPermsModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel large-modal">
+        <h3 class="modal-title">Gán Quyền Cho Vai Trò: {{ selectedRoleForPerms?.name }}</h3>
+        <p class="modal-desc">Tích chọn các quyền mà vai trò này được phép thực thi trong hệ thống:</p>
+
+        <div class="perm-selection-grid">
+          @for (p of permissionList(); track p.id) {
+            <label class="perm-item-box glass-panel">
+              <input 
+                type="checkbox" 
+                [checked]="selectedPermIds.includes(p.id)" 
+                (change)="togglePermSelection(p.id)" />
+              <div class="perm-info">
+                <span class="perm-name">{{ p.name }}</span>
+                <span class="perm-mod badge badge-purple">{{ p.module }}</span>
+              </div>
+            </label>
+          }
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showAssignPermsModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onSaveRolePermissions()" [disabled]="loading()">
+            @if (loading()) { <span class="spinner"></span> }
+            <span>Lưu Quyền Hạn ✨</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: CREATE PERMISSION -->
+  @if (showCreatePermModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel">
+        <h3 class="modal-title">Tạo Quyền Hạn Mới</h3>
+        <div class="form-group py-2">
+          <label>Tên Quyền (Ví dụ: USER:EXPORT)</label>
+          <input type="text" [(ngModel)]="newPermForm.name" placeholder="MODULE:ACTION" autofocus />
+        </div>
+        <div class="form-group py-2">
+          <label>Module</label>
+          <input type="text" [(ngModel)]="newPermForm.module" placeholder="Ví dụ: USER, ROLE, REPORT" />
+        </div>
+        <div class="form-group py-2">
+          <label>Mô Tả</label>
+          <input type="text" [(ngModel)]="newPermForm.description" placeholder="Mô tả quyền hạn" />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showCreatePermModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onCreatePermSubmit()" [disabled]="loading()">
+            <span>Tạo Quyền</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: CONFIRM ENABLE 2FA -->
+  @if (showEnable2faModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel">
+        <h3 class="modal-title">Kích Hoạt 2FA</h3>
+        <p class="modal-desc">
+          Mã OTP kích hoạt đã được gửi tới email <strong>{{ profile()?.email }}</strong>. Vui lòng nhập mã để hoàn tất:
+        </p>
+
+        <div class="otp-input-wrapper">
+          <input type="text" class="otp-box" maxlength="6" [(ngModel)]="enable2faOtp" placeholder="000000" autofocus />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showEnable2faModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onConfirmEnable2fa()" [disabled]="loading()">
+            @if (loading()) { <span class="spinner"></span> }
+            <span>Xác Nhận Bật 2FA 🛡️</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL: DISABLE 2FA -->
+  @if (showDisable2faModal()) {
+    <div class="modal-backdrop">
+      <div class="modal-panel glass-panel">
+        <h3 class="modal-title">Tắt Xác Thực 2FA</h3>
+        <p class="modal-desc">
+          Nhập mật khẩu tài khoản của bạn để xác nhận tắt tính năng xác thực hai yếu tố:
+        </p>
+
+        <div class="dream-input-group">
+          <input type="password" class="dream-input" [(ngModel)]="disable2faPassword" placeholder="Nhập mật khẩu hiện tại" autofocus />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showDisable2faModal.set(false)">Hủy</button>
+          <button type="button" class="btn-dream" (click)="onConfirmDisable2fa()" [disabled]="loading()">
+            @if (loading()) { <span class="spinner"></span> }
+            <span>Xác Nhận Tắt</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

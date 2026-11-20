@@ -1,0 +1,7 @@
+<app-toast></app-toast>
+
+@if (authService.isAuthenticated()) {
+  <app-dashboard></app-dashboard>
+} @else {
+  <app-auth></app-auth>
+}
