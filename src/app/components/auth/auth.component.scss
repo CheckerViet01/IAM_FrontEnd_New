@@ -3,122 +3,291 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 36px 20px;
   position: relative;
   overflow: hidden;
 }
 
-/* Dreamy floating aurora orbs */
+/* Dreamy Anime Twilight Orbs */
 .aurora-orb {
-  position: absolute;
+  position: fixed;
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(100px);
   pointer-events: none;
   z-index: 0;
-  animation: floatGlow 12s ease-in-out infinite alternate;
+  animation: floatGlow 14s ease-in-out infinite alternate;
 }
 
 .orb-1 {
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
-  top: -100px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(255, 107, 157, 0.32) 0%, transparent 70%);
+  top: -120px;
   left: -100px;
 }
 
 .orb-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.35) 0%, transparent 70%);
-  bottom: -120px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.32) 0%, transparent 70%);
+  bottom: -140px;
   right: -120px;
-  animation-duration: 15s;
+  animation-duration: 17s;
   animation-delay: -3s;
 }
 
 .orb-3 {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
-  top: 40%;
-  left: 65%;
-  animation-duration: 18s;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.22) 0%, transparent 70%);
+  top: 45%;
+  left: 60%;
+  animation-duration: 20s;
   animation-delay: -6s;
 }
 
-.auth-card {
+/* Main Split Portal */
+.auth-shell {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 460px;
-  padding: 38px 34px;
+  max-width: 960px;
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: stretch;
+  animation: fadeIn 0.45s ease;
+}
+
+@media (max-width: 880px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+    max-width: 470px;
+  }
+  .anime-showcase {
+    display: none !important;
+  }
+}
+
+/* Left Anime Showcase Card */
+.anime-showcase {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-color: rgba(255, 107, 157, 0.28);
+}
+
+.showcase-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.scene-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.arcane-group {
+  transform-origin: 210px 220px;
+  animation: slowSpin 38s linear infinite;
+}
+
+.showcase-overlay {
+  position: relative;
+  z-index: 2;
+  padding: 28px;
+  background: linear-gradient(180deg, transparent 0%, rgba(11, 6, 26, 0.85) 36%, rgba(9, 6, 22, 0.96) 100%);
+}
+
+.jp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(255, 107, 157, 0.18);
+  border: 1px solid rgba(255, 154, 196, 0.42);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffd1e6;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+
+  .jp-kanji {
+    font-family: var(--font-jp);
+    color: #ff8fab;
+  }
+  .pill-sep {
+    color: var(--cyan);
+  }
+}
+
+.showcase-title {
+  font-size: 1.55rem;
+  line-height: 1.28;
+  margin-bottom: 10px;
+  color: #ffffff;
+
+  span {
+    background: linear-gradient(90deg, #ff8fab 0%, #c084fc 60%, #67e8f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.showcase-desc {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.showcase-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 154, 196, 0.22);
+
+  .stat-icon {
+    font-size: 1.2rem;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .stat-sub {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+  }
+}
+
+/* Right Auth Card */
+.auth-card {
+  position: relative;
+  padding: 36px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Anime HUD Corner Brackets */
+.hud-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  opacity: 0.7;
+
+  &.top-left {
+    top: 12px;
+    left: 12px;
+    border-top: 2px solid var(--sakura);
+    border-left: 2px solid var(--sakura);
+    border-top-left-radius: 6px;
+  }
+  &.top-right {
+    top: 12px;
+    right: 12px;
+    border-top: 2px solid var(--cyan);
+    border-right: 2px solid var(--cyan);
+    border-top-right-radius: 6px;
+  }
+  &.bottom-left {
+    bottom: 12px;
+    left: 12px;
+    border-bottom: 2px solid var(--cyan);
+    border-left: 2px solid var(--cyan);
+    border-bottom-left-radius: 6px;
+  }
+  &.bottom-right {
+    bottom: 12px;
+    right: 12px;
+    border-bottom: 2px solid var(--sakura);
+    border-right: 2px solid var(--sakura);
+    border-bottom-right-radius: 6px;
+  }
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .brand-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  padding: 5px 15px;
+  background: rgba(255, 107, 157, 0.14);
+  border: 1px solid rgba(255, 107, 157, 0.36);
   border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #c084fc;
-  letter-spacing: 0.05em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ffb3d1;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 12px;
-  .sparkle {
-    color: #f472b6;
-    animation: floatGlow 3s infinite ease-in-out;
-  }
+  margin-bottom: 10px;
 }
 
 .brand-title {
-  font-size: 1.85rem;
+  font-size: 1.78rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, #ddd6fe 60%, #fbcfe8 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 55%, #a5f3fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 6px;
 }
 
 .brand-subtitle {
-  font-size: 0.86rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 /* Tab Switcher */
 .tab-switcher {
   display: flex;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(10, 6, 24, 0.6);
   padding: 5px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 26px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 154, 196, 0.2);
+  margin-bottom: 22px;
 }
 
 .tab-btn {
   flex: 1;
   padding: 11px;
-  border-radius: 12px;
+  border-radius: 11px;
   border: none;
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-display);
   font-size: 0.92rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.25s ease;
+
   &.active {
-    background: rgba(255, 255, 255, 0.12);
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.28) 0%, rgba(168, 85, 247, 0.28) 100%);
+    border: 1px solid rgba(255, 154, 196, 0.45);
     color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 18px rgba(255, 107, 157, 0.22);
   }
 }
 
@@ -131,10 +300,11 @@
   position: relative;
   display: flex;
   align-items: center;
+
   .field-icon {
     position: absolute;
     left: 14px;
-    color: var(--text-dim);
+    color: #c084fc;
     pointer-events: none;
   }
   .dream-input {
@@ -143,16 +313,18 @@
   }
   .eye-btn {
     position: absolute;
-    right: 12px;
+    right: 10px;
     background: none;
     border: none;
-    color: var(--text-dim);
+    color: var(--text-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
     padding: 6px;
     transition: color 0.2s;
-    &:hover { color: #ffffff; }
+    &:hover {
+      color: var(--sakura-soft);
+    }
   }
 }
 
@@ -164,19 +336,20 @@
 
 .forgot-link {
   font-size: 0.8rem;
-  color: #c084fc;
+  color: #67e8f9;
   text-decoration: none;
+  font-weight: 600;
   transition: all 0.2s;
   &:hover {
-    color: #f472b6;
+    color: #ff8fab;
     text-decoration: underline;
   }
 }
 
 .btn-block {
   width: 100%;
-  margin-top: 10px;
-  padding: 14px;
+  margin-top: 8px;
+  padding: 13px;
   font-size: 1rem;
 }
 
@@ -186,7 +359,7 @@
 }
 .strength-bar-bg {
   width: 100%;
-  height: 4px;
+  height: 5px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   overflow: hidden;
@@ -194,6 +367,7 @@
 .strength-bar-fill {
   height: 100%;
   transition: all 0.3s ease;
+  box-shadow: 0 0 10px currentColor;
 }
 .strength-label {
   display: block;
@@ -207,7 +381,7 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(7, 3, 16, 0.75);
+  background: rgba(6, 3, 16, 0.8);
   backdrop-filter: blur(12px);
   z-index: 9999;
   display: flex;
@@ -220,7 +394,7 @@
 .modal-panel {
   width: 100%;
   max-width: 440px;
-  padding: 34px 28px;
+  padding: 32px 28px;
   text-align: center;
 }
 
@@ -228,30 +402,34 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
-  border: 1px solid rgba(236, 72, 153, 0.4);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.24) 0%, rgba(168, 85, 247, 0.24) 100%);
+  border: 1px solid rgba(255, 154, 196, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
-  color: #f472b6;
-  box-shadow: 0 0 25px rgba(236, 72, 153, 0.3);
+  color: #ffb3d1;
+  box-shadow: 0 0 28px rgba(255, 107, 157, 0.35);
 }
 
 .modal-title {
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   margin-bottom: 8px;
 }
 
 .modal-desc {
   font-size: 0.88rem;
   color: var(--text-muted);
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   line-height: 1.5;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .otp-input-wrapper {
-  margin: 20px 0 26px;
+  margin: 18px 0 24px;
 }
 
 .otp-box {
@@ -263,15 +441,16 @@
   letter-spacing: 12px;
   text-align: center;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid var(--accent-purple);
+  background: rgba(12, 8, 28, 0.85);
+  border: 2px solid var(--sakura);
   border-radius: 16px;
   outline: none;
-  box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 25px rgba(255, 107, 157, 0.35);
   transition: all 0.25s;
+
   &:focus {
-    border-color: #ec4899;
-    box-shadow: 0 0 35px rgba(236, 72, 153, 0.55);
+    border-color: var(--cyan);
+    box-shadow: 0 0 32px rgba(34, 211, 238, 0.45);
   }
 }
 

@@ -1,180 +1,293 @@
 <div class="auth-wrapper">
-  <!-- Glowing Dreamy Backdrop Elements -->
+  <!-- Anime Sky & Drifting Sakura Petals -->
+  <div class="starfield"></div>
+  <div class="sakura-layer" aria-hidden="true">
+    <span class="petal"></span><span class="petal"></span><span class="petal"></span>
+    <span class="petal"></span><span class="petal"></span><span class="petal"></span>
+    <span class="petal"></span><span class="petal"></span><span class="petal"></span>
+    <span class="petal"></span>
+  </div>
   <div class="aurora-orb orb-1"></div>
   <div class="aurora-orb orb-2"></div>
   <div class="aurora-orb orb-3"></div>
 
-  <div class="auth-card glass-panel">
-    <!-- Header Brand -->
-    <div class="auth-header">
-      <div class="brand-badge">
-        <span class="sparkle">✦</span>
-        <span>IAM Identity Service</span>
+  <div class="auth-shell">
+    <!-- Left Anime Twilight Showcase Panel -->
+    <aside class="anime-showcase glass-panel">
+      <div class="showcase-scene">
+        <!-- Shinkai-style Night Sky, Crescent Moon, Comet & Torii Gate SVG -->
+        <svg class="scene-svg" viewBox="0 0 420 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="420" y2="460" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#190e3a"/>
+              <stop offset="55%" stop-color="#2b124c"/>
+              <stop offset="100%" stop-color="#4c164d"/>
+            </linearGradient>
+            <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffe4f2" stop-opacity="0.95"/>
+              <stop offset="55%" stop-color="#ff8fab" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#ff6b9d" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="cometGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+              <stop offset="65%" stop-color="#a5f3fc" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+            </linearGradient>
+          </defs>
+
+          <rect width="420" height="460" rx="20" fill="url(#skyGrad)"/>
+
+          <!-- Horizon Aurora Glow -->
+          <ellipse cx="210" cy="390" rx="220" ry="90" fill="#ff6b9d" fill-opacity="0.16"/>
+          <ellipse cx="140" cy="140" rx="140" ry="110" fill="#8b5cf6" fill-opacity="0.18"/>
+
+          <!-- Shooting Star / Comet -->
+          <line x1="65" y1="70" x2="195" y2="145" stroke="url(#cometGrad)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="196" cy="146" r="3.5" fill="#ffffff"/>
+
+          <!-- Crescent Moon -->
+          <circle cx="315" cy="110" r="68" fill="url(#moonGlow)"/>
+          <path d="M332 75C308 75 289 94 289 118C289 142 308 161 332 161C342 161 351 158 358 152C345 157 328 153 319 142C308 129 309 109 321 97C330 88 344 85 356 89C349 80 341 75 332 75Z" fill="#fff1f7"/>
+
+          <!-- Rotating Arcane Circle Accent -->
+          <g class="arcane-group" opacity="0.38">
+            <circle cx="210" cy="220" r="108" stroke="#f472b6" stroke-width="1" stroke-dasharray="6 6"/>
+            <circle cx="210" cy="220" r="88" stroke="#22d3ee" stroke-width="1"/>
+            <polygon points="210,122 295,270 125,270" stroke="#c084fc" stroke-width="1" fill="none"/>
+            <polygon points="210,318 295,170 125,170" stroke="#ff6b9d" stroke-width="1" fill="none"/>
+          </g>
+
+          <!-- Distant Mountains -->
+          <path d="M0 365L75 315L160 352L255 295L340 345L420 310V460H0V365Z" fill="#130a29" fill-opacity="0.85"/>
+          <path d="M0 390L110 348L210 378L310 342L420 382V460H0V390Z" fill="#0d071d"/>
+
+          <!-- Stylized Torii Gate Silhouette -->
+          <g transform="translate(132, 240)">
+            <path d="M12 22C50 10 106 10 144 22L148 13C108 2 48 2 8 13L12 22Z" fill="#ff4d8d"/>
+            <rect x="22" y="34" width="112" height="8" rx="3" fill="#ff6b9d"/>
+            <rect x="38" y="20" width="11" height="125" rx="2" fill="#e11d74"/>
+            <rect x="107" y="20" width="11" height="125" rx="2" fill="#e11d74"/>
+            <rect x="73" y="20" width="10" height="18" fill="#ffb3d1"/>
+          </g>
+
+          <!-- Sakura Branch Silhouette Left -->
+          <path d="M0 190Q60 180 110 210Q85 205 55 212" stroke="#1e1035" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="88" cy="196" r="14" fill="#ff6b9d" fill-opacity="0.75"/>
+          <circle cx="110" cy="208" r="10" fill="#ffb3d1" fill-opacity="0.8"/>
+          <circle cx="62" cy="186" r="16" fill="#ec4899" fill-opacity="0.65"/>
+          <circle cx="38" cy="202" r="13" fill="#ff8fab" fill-opacity="0.7"/>
+        </svg>
       </div>
-      <h1 class="brand-title">Cổng Quản Lý Danh Tính</h1>
-      <p class="brand-subtitle">Trải nghiệm bảo mật thế hệ mới • JWT & Redis Cloud Shield</p>
-    </div>
 
-    <!-- Navigation Tabs -->
-    <div class="tab-switcher">
-      <button 
-        type="button" 
-        class="tab-btn" 
-        [class.active]="activeTab === 'login'"
-        (click)="activeTab = 'login'">
-        Đăng Nhập
-      </button>
-      <button 
-        type="button" 
-        class="tab-btn" 
-        [class.active]="activeTab === 'register'"
-        (click)="activeTab = 'register'">
-        Tạo Tài Khoản
-      </button>
-    </div>
-
-    <!-- LOGIN FORM -->
-    @if (activeTab === 'login') {
-      <form (ngSubmit)="onLogin()" class="form-container">
-        <div class="dream-input-group">
-          <label class="dream-label">Địa chỉ Email</label>
-          <div class="input-with-icon">
-            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            <input 
-              type="email" 
-              class="dream-input" 
-              name="loginEmail" 
-              [(ngModel)]="loginData.email" 
-              placeholder="tenban@domain.com"
-              required />
-          </div>
+      <div class="showcase-overlay">
+        <div class="jp-pill">
+          <span class="jp-kanji">夜桜・IAM</span>
+          <span class="pill-sep">✦</span>
+          <span>CYBER SHRINE</span>
         </div>
 
-        <div class="dream-input-group">
-          <div class="label-row">
-            <label class="dream-label">Mật khẩu</label>
-            <a href="javascript:void(0)" class="forgot-link" (click)="openForgotPassword()">Quên mật khẩu?</a>
-          </div>
-          <div class="input-with-icon">
-            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <input 
-              [type]="showLoginPass ? 'text' : 'password'" 
-              class="dream-input" 
-              name="loginPassword" 
-              [(ngModel)]="loginData.password" 
-              placeholder="••••••••"
-              required />
-            <button type="button" class="eye-btn" (click)="showLoginPass = !showLoginPass">
-              @if (showLoginPass) {
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-              } @else {
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              }
-            </button>
-          </div>
-        </div>
+        <h2 class="showcase-title">Cánh Cổng Danh Tính<br><span>Ánh Trăng & Hoa Anh Đào</span></h2>
+        <p class="showcase-desc">
+          Hệ thống xác thực JWT bảo mật đa lớp, đồng bộ phiên Redis siêu tốc và phong ấn OTP 2 lớp.
+        </p>
 
-        <button type="submit" class="btn-dream btn-block" [disabled]="loading()">
-          @if (loading()) {
-            <span class="spinner"></span> Đang đăng nhập...
-          } @else {
-            <span>Đăng Nhập Ngay ✨</span>
-          }
-        </button>
-      </form>
-    }
-
-    <!-- REGISTER FORM -->
-    @if (activeTab === 'register') {
-      <form (ngSubmit)="onRegister()" class="form-container">
-        <div class="dream-input-group">
-          <label class="dream-label">Họ và Tên</label>
-          <div class="input-with-icon">
-            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <input 
-              type="text" 
-              class="dream-input" 
-              name="fullName" 
-              [(ngModel)]="registerData.fullName" 
-              placeholder="Nguyễn Văn A" />
-          </div>
-        </div>
-
-        <div class="dream-input-group">
-          <label class="dream-label">Địa chỉ Email</label>
-          <div class="input-with-icon">
-            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            <input 
-              type="email" 
-              class="dream-input" 
-              name="regEmail" 
-              [(ngModel)]="registerData.email" 
-              placeholder="tenban@domain.com"
-              required />
-          </div>
-        </div>
-
-        <div class="dream-input-group">
-          <label class="dream-label">Mật khẩu</label>
-          <div class="input-with-icon">
-            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <input 
-              [type]="showRegPass ? 'text' : 'password'" 
-              class="dream-input" 
-              name="regPassword" 
-              [(ngModel)]="registerData.password" 
-              placeholder="Tối thiểu 6 ký tự"
-              required />
-            <button type="button" class="eye-btn" (click)="showRegPass = !showRegPass">
-              @if (showRegPass) {
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-              } @else {
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              }
-            </button>
-          </div>
-
-          <!-- Password Strength Indicator -->
-          @if (registerData.password) {
-            <div class="strength-meter">
-              <div class="strength-bar-bg">
-                <div class="strength-bar-fill" [style.width.%]="passwordStrength.score" [style.background]="passwordStrength.color"></div>
-              </div>
-              <span class="strength-label" [style.color]="passwordStrength.color">{{ passwordStrength.label }}</span>
+        <div class="showcase-stats">
+          <div class="stat-chip">
+            <span class="stat-icon">⚡</span>
+            <div>
+              <div class="stat-label">JWT + Redis</div>
+              <div class="stat-sub">Token Blacklist & Refresh</div>
             </div>
-          }
-        </div>
-
-        <div class="dream-input-group">
-          <label class="dream-label">Xác nhận mật khẩu</label>
-          <div class="input-with-icon">
-            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <input 
-              [type]="showRegConfirmPass ? 'text' : 'password'" 
-              class="dream-input" 
-              name="regConfirmPass" 
-              [(ngModel)]="registerData.confirmPassword" 
-              placeholder="Nhập lại mật khẩu"
-              required />
-            <button type="button" class="eye-btn" (click)="showRegConfirmPass = !showRegConfirmPass">
-              @if (showRegConfirmPass) {
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-              } @else {
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              }
-            </button>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-icon">🛡️</span>
+            <div>
+              <div class="stat-label">2FA Seal</div>
+              <div class="stat-sub">Bảo vệ OTP qua Email</div>
+            </div>
           </div>
         </div>
+      </div>
+    </aside>
 
-        <button type="submit" class="btn-dream btn-block" [disabled]="loading()">
-          @if (loading()) {
-            <span class="spinner"></span> Đang tạo tài khoản...
-          } @else {
-            <span>Đăng Ký Tài Khoản 🌸</span>
-          }
+    <!-- Right Auth Form Card -->
+    <div class="auth-card glass-panel">
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
+
+      <!-- Header Brand -->
+      <div class="auth-header">
+        <div class="brand-badge">
+          <span class="sparkle">🌸</span>
+          <span>IAM Identity Portal</span>
+        </div>
+        <h1 class="brand-title">Cổng Quản Lý Danh Tính</h1>
+        <p class="brand-subtitle">Chào mừng trở lại • JWT &amp; Redis Sakura Shield</p>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="tab-switcher">
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab === 'login'"
+          (click)="activeTab = 'login'">
+          <span>Đăng Nhập</span>
         </button>
-      </form>
-    }
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab === 'register'"
+          (click)="activeTab = 'register'">
+          <span>Tạo Tài Khoản</span>
+        </button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      @if (activeTab === 'login') {
+        <form (ngSubmit)="onLogin()" class="form-container">
+          <div class="dream-input-group">
+            <label class="dream-label">Địa chỉ Email</label>
+            <div class="input-with-icon">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input
+                type="email"
+                class="dream-input"
+                name="loginEmail"
+                [(ngModel)]="loginData.email"
+                placeholder="tenban@domain.com"
+                required />
+            </div>
+          </div>
+
+          <div class="dream-input-group">
+            <div class="label-row">
+              <label class="dream-label">Mật khẩu</label>
+              <a href="javascript:void(0)" class="forgot-link" (click)="openForgotPassword()">Quên mật khẩu?</a>
+            </div>
+            <div class="input-with-icon">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input
+                [type]="showLoginPass ? 'text' : 'password'"
+                class="dream-input"
+                name="loginPassword"
+                [(ngModel)]="loginData.password"
+                placeholder="••••••••"
+                required />
+              <button type="button" class="eye-btn" (click)="showLoginPass = !showLoginPass">
+                @if (showLoginPass) {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                } @else {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                }
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-dream btn-block" [disabled]="loading()">
+            @if (loading()) {
+              <span class="spinner"></span> Đang xác thực...
+            } @else {
+              <span>Đăng Nhập Ngay ✨</span>
+            }
+          </button>
+        </form>
+      }
+
+      <!-- REGISTER FORM -->
+      @if (activeTab === 'register') {
+        <form (ngSubmit)="onRegister()" class="form-container">
+          <div class="dream-input-group">
+            <label class="dream-label">Họ và Tên</label>
+            <div class="input-with-icon">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input
+                type="text"
+                class="dream-input"
+                name="fullName"
+                [(ngModel)]="registerData.fullName"
+                placeholder="Nguyễn Văn A" />
+            </div>
+          </div>
+
+          <div class="dream-input-group">
+            <label class="dream-label">Địa chỉ Email</label>
+            <div class="input-with-icon">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input
+                type="email"
+                class="dream-input"
+                name="regEmail"
+                [(ngModel)]="registerData.email"
+                placeholder="tenban@domain.com"
+                required />
+            </div>
+          </div>
+
+          <div class="dream-input-group">
+            <label class="dream-label">Mật khẩu</label>
+            <div class="input-with-icon">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input
+                [type]="showRegPass ? 'text' : 'password'"
+                class="dream-input"
+                name="regPassword"
+                [(ngModel)]="registerData.password"
+                placeholder="Tối thiểu 6 ký tự"
+                required />
+              <button type="button" class="eye-btn" (click)="showRegPass = !showRegPass">
+                @if (showRegPass) {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                } @else {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                }
+              </button>
+            </div>
+
+            <!-- Password Strength Mana Meter -->
+            @if (registerData.password) {
+              <div class="strength-meter">
+                <div class="strength-bar-bg">
+                  <div class="strength-bar-fill" [style.width.%]="passwordStrength.score" [style.background]="passwordStrength.color"></div>
+                </div>
+                <span class="strength-label" [style.color]="passwordStrength.color">{{ passwordStrength.label }}</span>
+              </div>
+            }
+          </div>
+
+          <div class="dream-input-group">
+            <label class="dream-label">Xác nhận mật khẩu</label>
+            <div class="input-with-icon">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input
+                [type]="showRegConfirmPass ? 'text' : 'password'"
+                class="dream-input"
+                name="regConfirmPass"
+                [(ngModel)]="registerData.confirmPassword"
+                placeholder="Nhập lại mật khẩu"
+                required />
+              <button type="button" class="eye-btn" (click)="showRegConfirmPass = !showRegConfirmPass">
+                @if (showRegConfirmPass) {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                } @else {
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                }
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-dream btn-block" [disabled]="loading()">
+            @if (loading()) {
+              <span class="spinner"></span> Đang tạo tài khoản...
+            } @else {
+              <span>Đăng Ký Tài Khoản 🌸</span>
+            }
+          </button>
+        </form>
+      }
+    </div>
   </div>
 
   <!-- 2FA OTP MODAL -->
@@ -186,16 +299,16 @@
         </div>
         <h2 class="modal-title">Xác Thực Hai Yếu Tố (2FA)</h2>
         <p class="modal-desc">
-          Mã xác thực 6 số đã được gửi qua email <strong>{{ pending2faEmail }}</strong>. Vui lòng nhập mã để tiếp tục:
+          Mã xác thực 6 số đã được gửi qua email <strong>{{ pending2faEmail }}</strong>. Vui lòng nhập mã để mở phong ấn:
         </p>
 
         <div class="otp-input-wrapper">
-          <input 
-            type="text" 
-            class="otp-box" 
-            maxlength="6" 
-            [(ngModel)]="otpCode" 
-            placeholder="000000" 
+          <input
+            type="text"
+            class="otp-box"
+            maxlength="6"
+            [(ngModel)]="otpCode"
+            placeholder="000000"
             autofocus />
         </div>
 
@@ -222,10 +335,10 @@
         @if (forgotStep === 'email') {
           <p class="modal-desc">Nhập địa chỉ email tài khoản của bạn để nhận mã OTP đặt lại mật khẩu:</p>
           <div class="dream-input-group">
-            <input 
-              type="email" 
-              class="dream-input" 
-              [(ngModel)]="forgotEmail" 
+            <input
+              type="email"
+              class="dream-input"
+              [(ngModel)]="forgotEmail"
               placeholder="tenban@domain.com" />
           </div>
           <div class="modal-actions">

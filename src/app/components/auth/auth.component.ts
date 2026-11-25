@@ -81,8 +81,10 @@ export class AuthComponent {
           this.pending2faEmail = this.loginData.email;
           this.show2faModal.set(true);
           this.toast.info('Tài khoản đã bật 2FA. Vui lòng nhập mã OTP gửi tới email của bạn!');
-        } else {
+        } else if (res.data?.accessToken && res.data?.user) {
           this.toast.success('Đăng nhập thành công! Chào mừng bạn trở lại ✨');
+        } else {
+          this.toast.error(res.data?.message || res.message || 'Không thể khởi tạo phiên đăng nhập!');
         }
       },
       error: (err) => {

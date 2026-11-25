@@ -1,5 +1,5 @@
 /* ===================================================================
-   DREAMY ETHEREAL THEME - IAM IDENTITY & ACCESS MANAGEMENT
+   YOZORA ANIME SAKURA HUD THEME - IAM IDENTITY & ACCESS MANAGEMENT
    =================================================================== */
 
 *, *::before, *::after {
@@ -9,37 +9,48 @@
 }
 
 :root {
-  --font-display: 'Outfit', sans-serif;
+  color-scheme: dark;
+  --font-display: 'Outfit', 'M PLUS Rounded 1c', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-jp: 'M PLUS Rounded 1c', sans-serif;
 
-  /* Colors */
-  --bg-dark: #0b0717;
-  --bg-gradient: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.22) 0%, transparent 40%),
-                 radial-gradient(circle at 85% 30%, rgba(244, 114, 182, 0.20) 0%, transparent 40%),
-                 radial-gradient(circle at 50% 80%, rgba(56, 189, 248, 0.16) 0%, transparent 50%),
-                 #0b0717;
+  /* Anime Twilight Palette */
+  --bg-dark: #090616;
+  --bg-panel: rgba(18, 12, 38, 0.74);
+  --bg-panel-solid: #150e2d;
+  --bg-input: rgba(12, 8, 28, 0.72);
+  --bg-gradient:
+    radial-gradient(ellipse at 12% 10%, rgba(255, 107, 157, 0.24) 0%, transparent 45%),
+    radial-gradient(ellipse at 88% 18%, rgba(139, 92, 246, 0.28) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% 95%, rgba(34, 211, 238, 0.18) 0%, transparent 55%),
+    linear-gradient(180deg, #090616 0%, #120a29 55%, #190e36 100%);
 
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-bg-hover: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-border-light: rgba(255, 255, 255, 0.22);
-  --glass-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5), 0 0 30px -10px rgba(167, 139, 250, 0.18);
+  /* Accents */
+  --sakura: #ff6b9d;
+  --sakura-soft: #ffb3d1;
+  --violet: #a855f7;
+  --cyan: #22d3ee;
+  --emerald: #34d399;
+  --amber: #fbbf24;
+  --rose: #fb7185;
 
-  --accent-purple: #a855f7;
-  --accent-pink: #ec4899;
-  --accent-cyan: #38bdf8;
-  --accent-gold: #fbbf24;
-  --accent-emerald: #10b981;
-  --accent-rose: #f43f5e;
+  /* Borders & Glows */
+  --glass-bg: rgba(19, 13, 41, 0.72);
+  --glass-bg-hover: rgba(28, 19, 58, 0.84);
+  --glass-border: rgba(255, 154, 196, 0.18);
+  --glass-border-light: rgba(255, 154, 196, 0.38);
+  --glass-shadow: 0 20px 50px -12px rgba(4, 2, 14, 0.8), 0 0 32px -8px rgba(255, 107, 157, 0.16);
 
-  --gradient-dream: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f43f5e 100%);
-  --gradient-aurora: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-  --gradient-cyan-purple: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  /* Gradients */
+  --gradient-dream: linear-gradient(135deg, #ff6b9d 0%, #c026d3 50%, #7c3aed 100%);
+  --gradient-aurora: linear-gradient(135deg, #22d3ee 0%, #8b5cf6 52%, #ff6b9d 100%);
+  --gradient-sakura: linear-gradient(135deg, #ff8fab 0%, #ff4d8d 55%, #a855f7 100%);
 
-  --text-main: #f8fafc;
-  --text-sub: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
+  /* Text */
+  --text-main: #fdfaff;
+  --text-sub: #dcd6f7;
+  --text-muted: #9f96c7;
+  --text-dim: #6f6699;
 }
 
 body {
@@ -58,141 +69,261 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 700;
   color: var(--text-main);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
-/* Scrollbars */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(11, 7, 23, 0.5);
+  background: rgba(9, 6, 22, 0.7);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.35);
+  background: linear-gradient(180deg, rgba(255, 107, 157, 0.5), rgba(168, 85, 247, 0.5));
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(168, 85, 247, 0.6);
+  background: linear-gradient(180deg, rgba(255, 107, 157, 0.85), rgba(168, 85, 247, 0.85));
 }
 
-/* Animations */
+/* Shared Anime Animations */
 @keyframes floatGlow {
   0%, 100% {
     transform: translateY(0) scale(1);
-    opacity: 0.8;
+    opacity: 0.78;
   }
   50% {
-    transform: translateY(-12px) scale(1.05);
+    transform: translateY(-14px) scale(1.04);
     opacity: 1;
   }
 }
 
-@keyframes pulseBorder {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reverseSpin {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes sakuraFall {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg) scale(0.9);
+    opacity: 0;
   }
-  50% {
-    box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+  12% {
+    opacity: 0.85;
   }
+  85% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(108vh) translateX(90px) rotate(320deg) scale(1.05);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmerSweep {
+  0% { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(220%) skewX(-20deg); }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(10px) scale(0.99);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-/* Glass Card */
+/* Sakura Falling Petals Layer */
+.sakura-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.petal {
+  position: absolute;
+  top: -8%;
+  width: 14px;
+  height: 10px;
+  background: linear-gradient(135deg, #ffd1e6 0%, #ff7eb3 100%);
+  border-radius: 14px 2px 14px 2px;
+  box-shadow: 0 0 10px rgba(255, 126, 179, 0.55);
+  opacity: 0;
+  animation: sakuraFall var(--dur, 12s) linear var(--delay, 0s) infinite;
+}
+
+.petal:nth-child(1)  { left: 6%;  --dur: 11s; --delay: 0s;   width: 12px; height: 9px; }
+.petal:nth-child(2)  { left: 15%; --dur: 14s; --delay: 2s;   width: 15px; height: 11px; }
+.petal:nth-child(3)  { left: 26%; --dur: 10s; --delay: 4.5s; width: 11px; height: 8px; }
+.petal:nth-child(4)  { left: 38%; --dur: 15s; --delay: 1s;   width: 14px; height: 10px; }
+.petal:nth-child(5)  { left: 49%; --dur: 12s; --delay: 6s;   width: 13px; height: 9px; }
+.petal:nth-child(6)  { left: 62%; --dur: 13s; --delay: 3s;   width: 16px; height: 11px; }
+.petal:nth-child(7)  { left: 74%; --dur: 11s; --delay: 5s;   width: 12px; height: 8px; }
+.petal:nth-child(8)  { left: 84%; --dur: 16s; --delay: 1.5s; width: 14px; height: 10px; }
+.petal:nth-child(9)  { left: 93%; --dur: 12s; --delay: 7s;   width: 11px; height: 8px; }
+.petal:nth-child(10) { left: 54%; --dur: 14s; --delay: 8.5s; width: 13px; height: 9px; }
+
+/* Twinkling anime sky stars */
+.starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 14% 22%, rgba(255, 255, 255, 0.75) 50%, transparent 100%),
+    radial-gradient(1px 1px at 28% 12%, rgba(255, 182, 217, 0.8) 50%, transparent 100%),
+    radial-gradient(2px 2px at 46% 30%, rgba(165, 243, 252, 0.75) 50%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 67% 14%, rgba(255, 255, 255, 0.65) 50%, transparent 100%),
+    radial-gradient(1.8px 1.8px at 82% 28%, rgba(253, 230, 138, 0.75) 50%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 91% 45%, rgba(255, 255, 255, 0.7) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 18% 68%, rgba(192, 132, 252, 0.65) 50%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 76% 74%, rgba(255, 179, 209, 0.7) 50%, transparent 100%);
+}
+
+/* Glass HUD Card */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   border: 1px solid var(--glass-border);
-  border-radius: 24px;
+  border-radius: 22px;
   box-shadow: var(--glass-shadow);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
 }
 
 .glass-panel:hover {
   border-color: var(--glass-border-light);
 }
 
-/* Form Controls */
+/* Inputs & Selects */
 .dream-input-group {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   position: relative;
 }
 
 .dream-label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-sub);
-  margin-bottom: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--sakura-soft);
+  margin-bottom: 7px;
   letter-spacing: 0.02em;
 }
 
-.dream-input {
+.dream-input,
+.anime-input {
   width: 100%;
-  padding: 13px 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
+  padding: 12px 16px;
+  background: var(--bg-input);
+  border: 1px solid rgba(192, 132, 252, 0.24);
+  border-radius: 13px;
   color: var(--text-main);
-  font-size: 0.95rem;
+  font-size: 0.94rem;
   font-family: var(--font-body);
-  transition: all 0.25s ease;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
   outline: none;
 }
 
-.dream-input:focus {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: var(--accent-purple);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25);
+.dream-input:focus,
+.anime-input:focus {
+  background: rgba(24, 16, 52, 0.9);
+  border-color: var(--sakura);
+  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2), 0 0 18px rgba(168, 85, 247, 0.22);
 }
 
-.dream-input::placeholder {
+.dream-input::placeholder,
+.anime-input::placeholder {
   color: var(--text-dim);
+}
+
+select.dream-input,
+select.anime-input {
+  cursor: pointer;
+}
+
+select.dream-input option,
+select.anime-input option {
+  background-color: #160e30;
+  color: #fdfaff;
+}
+
+input[type="date"].dream-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.88) sepia(0.35) saturate(2.2) hue-rotate(290deg);
+  cursor: pointer;
+}
+
+/* Override browser white autofill box on dark Anime HUD */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fdfaff !important;
+  -webkit-box-shadow: 0 0 0 1000px #150e2f inset !important;
+  caret-color: #ff8fab;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* Buttons */
 .btn-dream {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 13px 26px;
+  gap: 8px;
+  padding: 12px 24px;
   border-radius: 14px;
-  border: none;
-  background: var(--gradient-dream);
+  border: 1px solid rgba(255, 192, 224, 0.35);
+  background: var(--gradient-sakura);
   color: #ffffff;
   font-family: var(--font-display);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.02em;
   cursor: pointer;
-  box-shadow: 0 8px 24px -6px rgba(236, 72, 153, 0.45);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px -6px rgba(255, 77, 141, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
 }
 
-.btn-dream:hover {
+.btn-dream::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-140%) skewX(-20deg);
+}
+
+.btn-dream:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px -4px rgba(236, 72, 153, 0.65);
+  box-shadow: 0 12px 30px -4px rgba(255, 77, 141, 0.72), 0 0 20px rgba(168, 85, 247, 0.35);
+  filter: brightness(1.06);
 }
 
-.btn-dream:active {
+.btn-dream:hover:not(:disabled)::after {
+  animation: shimmerSweep 0.75s ease forwards;
+}
+
+.btn-dream:active:not(:disabled) {
   transform: translateY(0);
 }
 
 .btn-dream:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -203,63 +334,100 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 11px 20px;
-  border-radius: 14px;
-  border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.03);
+  padding: 11px 18px;
+  border-radius: 13px;
+  border: 1px solid rgba(192, 132, 252, 0.28);
+  background: rgba(168, 85, 247, 0.09);
   color: var(--text-sub);
   font-family: var(--font-display);
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.22s ease;
 }
 
-.btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 107, 157, 0.16);
+  border-color: rgba(255, 107, 157, 0.5);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
 }
 
-/* Badges */
+.btn-ghost:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 13px;
+  border: 1px solid rgba(251, 113, 133, 0.45);
+  background: rgba(244, 63, 94, 0.14);
+  color: #fda4af;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(244, 63, 94, 0.28);
+  border-color: rgba(251, 113, 133, 0.8);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.3);
+}
+
+/* Anime Badges */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
+  gap: 5px;
+  padding: 4px 11px;
   border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .badge-purple {
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.18);
+  color: #e9d5ff;
+  border: 1px solid rgba(168, 85, 247, 0.4);
 }
 
 .badge-pink {
-  background: rgba(236, 72, 153, 0.15);
-  color: #f472b6;
-  border: 1px solid rgba(236, 72, 153, 0.3);
+  background: rgba(255, 107, 157, 0.18);
+  color: #fbcfe8;
+  border: 1px solid rgba(255, 107, 157, 0.45);
+}
+
+.badge-cyan {
+  background: rgba(34, 211, 238, 0.15);
+  color: #a5f3fc;
+  border: 1px solid rgba(34, 211, 238, 0.4);
 }
 
 .badge-emerald {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(52, 211, 153, 0.16);
+  color: #6ee7b7;
+  border: 1px solid rgba(52, 211, 153, 0.42);
 }
 
-.badge-amber {
-  background: rgba(251, 191, 36, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(251, 191, 36, 0.3);
+.badge-amber,
+.badge-yellow {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fde68a;
+  border: 1px solid rgba(251, 191, 36, 0.4);
 }
 
 .badge-rose {
-  background: rgba(244, 63, 94, 0.15);
-  color: #fb7185;
-  border: 1px solid rgba(244, 63, 94, 0.3);
+  background: rgba(251, 113, 133, 0.16);
+  color: #fda4af;
+  border: 1px solid rgba(251, 113, 133, 0.42);
 }

@@ -92,6 +92,17 @@ export class AuthService {
     return this.http.post<ApiResponse<string>>(`${this.apiUrl}/reset-password`, data);
   }
 
+  refreshToken(): Observable<ApiResponse<AuthResponse>> {
+    const refreshToken = this.getRefreshToken();
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
+      tap(res => {
+        if (res.success && res.data) {
+          this.setSession(res.data);
+        }
+      })
+    );
+  }
+
   logout(): Observable<ApiResponse<string>> {
     const refreshToken = this.getRefreshToken();
     return this.http.post<ApiResponse<string>>(`${this.apiUrl}/logout?refreshToken=${refreshToken || ''}`, {}).pipe(

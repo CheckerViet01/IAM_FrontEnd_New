@@ -10,6 +10,7 @@ import { ToastService } from '../../services/toast.service';
     <div class="toast-container">
       @for (toast of toastService.toasts(); track toast.id) {
         <div class="toast-item" [ngClass]="'toast-' + toast.type">
+          <div class="toast-glow"></div>
           <div class="toast-icon">
             @if (toast.type === 'success') {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
@@ -35,8 +36,8 @@ import { ToastService } from '../../services/toast.service';
   styles: [`
     .toast-container {
       position: fixed;
-      top: 24px;
-      right: 24px;
+      top: 22px;
+      right: 22px;
       z-index: 99999;
       display: flex;
       flex-direction: column;
@@ -45,34 +46,47 @@ import { ToastService } from '../../services/toast.service';
       pointer-events: none;
     }
     .toast-item {
+      position: relative;
+      overflow: hidden;
       pointer-events: auto;
       display: flex;
       align-items: flex-start;
       gap: 12px;
       padding: 14px 18px;
       border-radius: 16px;
-      background: rgba(18, 12, 34, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.2);
+      background: rgba(18, 11, 38, 0.9);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 14px 35px rgba(5, 2, 18, 0.65), 0 0 24px rgba(255, 107, 157, 0.18);
       animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 154, 196, 0.25);
+    }
+    .toast-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
     }
     .toast-success {
-      border-color: rgba(52, 211, 153, 0.4);
+      border-color: rgba(52, 211, 153, 0.45);
+      .toast-glow { background: #34d399; box-shadow: 0 0 12px #34d399; }
       .toast-icon { color: #34d399; }
     }
     .toast-error {
-      border-color: rgba(244, 63, 94, 0.4);
+      border-color: rgba(251, 113, 133, 0.45);
+      .toast-glow { background: #fb7185; box-shadow: 0 0 12px #fb7185; }
       .toast-icon { color: #fb7185; }
     }
     .toast-warning {
-      border-color: rgba(251, 191, 36, 0.4);
+      border-color: rgba(251, 191, 36, 0.45);
+      .toast-glow { background: #fbbf24; box-shadow: 0 0 12px #fbbf24; }
       .toast-icon { color: #fbbf24; }
     }
     .toast-info {
-      border-color: rgba(56, 189, 248, 0.4);
-      .toast-icon { color: #38bdf8; }
+      border-color: rgba(34, 211, 238, 0.45);
+      .toast-glow { background: #22d3ee; box-shadow: 0 0 12px #22d3ee; }
+      .toast-icon { color: #22d3ee; }
     }
     .toast-icon {
       flex-shrink: 0;
@@ -84,25 +98,25 @@ import { ToastService } from '../../services/toast.service';
     .toast-title {
       font-size: 0.85rem;
       font-weight: 700;
-      color: #ffffff;
+      color: #fdfaff;
       margin-bottom: 2px;
       font-family: var(--font-display, sans-serif);
     }
     .toast-message {
       font-size: 0.82rem;
-      color: #cbd5e1;
-      line-height: 1.4;
+      color: #dcd6f7;
+      line-height: 1.45;
     }
     .toast-close {
       background: none;
       border: none;
-      color: #94a3b8;
-      font-size: 1.2rem;
+      color: #9f96c7;
+      font-size: 1.25rem;
       cursor: pointer;
       padding: 0 4px;
       line-height: 1;
       transition: color 0.2s;
-      &:hover { color: #ffffff; }
+      &:hover { color: #ff6b9d; }
     }
     @keyframes toastIn {
       from {
